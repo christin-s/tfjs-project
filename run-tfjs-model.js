@@ -30,10 +30,13 @@ const processInput = function (imagePath) {
   return tf.node.decodeImage(uint8array, 3).expandDims();
 }
 
+const runModel = function (inputTensor) {
+  console.log('running model');
+
+  return model.executeAsync(inputTensor);
+}
+
 // run
-// loadModel().then(model => {
-//   console.log(model);
-// })
 if (process.argv.length < 3) {
   console.log('please pass an image to process. ex:');
   console.log('  node run-tfjs-model.js /path/to/image.jpg');
@@ -43,6 +46,8 @@ if (process.argv.length < 3) {
 
   loadModel().then(model => {
     const inputTensor = processInput(imagePath);
-    inputTensor.print();
+    return runModel(inputTensor);
+  }).then(prediction => {
+    console.log(prediction);
   })
 }
